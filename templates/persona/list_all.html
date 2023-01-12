@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    listar
+{% endblock title %}
+
+{% block content %}
+
+{% include 'includes/header.html' %}
+
+<div class="grid-container">
+    <div class="grid-x">
+        <h1 class="cell">Lista Empleados</h1>
+        <form class="cell grid-x grid-margin-x" method="GET"> {% csrf_token %}
+            <div class="cell large-7">
+                <input id="kword" name="kword" type="text" placeholder="Buscar empleado">
+            </div>
+            <div class="cell large-2">
+                <button type="submit" class="submit success button" >Buscar</button>
+            </div>
+        </form>
+        <div class="cell">
+            
+            <table>
+                <thead>
+                  <tr>
+                    <th width="200">Id</th>
+                    <th>Nombres</th>
+                    <th width="150">Apellidos</th>
+                    <th width="150">Departamento</th>
+                    <th width="150">Accion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    
+                    {% for item in empleados %}    
+                    <tr>
+                      <td>{{item.id}}</td>
+                      <td>{{item.first_name}}</td>
+                      <td>{{item.last_name}}</td>
+                      <td>{{item.departament}}</td>
+                      <td><a class="button warning" href="{% url 'persona_app:empleado_detail' item.id %}">ver</a></td>
+                    </tr>
+                    {% endfor %}
+                        
+                </tbody>
+              </table>
+
+        </div>
+        <div class="cell">
+            
+            {% if is_paginated %}    
+            <nav aria-label="Pagination">
+                <ul class="pagination">
+                    
+                    {% if page_obj.has_previous %}
+                    <li class="pagination-previous">
+                        <a href="?page={{page_obj.previous_page_number}}">Atras</a>
+                    </li>      
+                    {% endif %}
+                        
+                    
+                    {% for page in paginator.page_range  %}
+                    
+                    
+                    {% if page == page_obj.number %}
+                    <li class="current"><span class="show-for-sr">You're on page</span>{{page}}</li>
+                    {% else %}    
+                    <li class=""><a href="?page={{page}}">{{page}}</a></li>
+                    {% endif %}
+                        
+                    
+                    
+                    {% endfor %}
+                        
+                    
+                    {% if page_obj.has_next %}    
+                    <li class="pagination-next">
+                        <a href="?page={{page_obj.next_page_number}}">Siguiente </a>
+                    </li>
+                    {% endif %}
+                        
+                </ul>
+            </nav>
+            {% endif %}
+                
+        </div>
+    </div>
+    <!-- <h1>Lista de todos los empleados</h1>
+    <ul>
+        
+        {% for item in object_list %}
+            <li>{{item}}</li>
+        {% endfor %}
+            
+    </ul> -->
+
+</div>
+    
+
+{% endblock content %}
+    
